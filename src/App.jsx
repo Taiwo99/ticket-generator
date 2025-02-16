@@ -1,35 +1,43 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+// src/App.jsx
+import React, { useState } from "react";
+import StepOne from "./pages/StepOne";
+import StepTwo from "./pages/StepTwo";
+import StepThree from "./pages/StepThree";
 
-function App() {
-  const [count, setCount] = useState(0)
+const App = () => {
+  const [step, setStep] = useState(1);
+  const [ticketType, setTicketType] = useState("");
+  const [ticketCount, setTicketCount] = useState(1);
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [avatar, setAvatar] = useState("");
+  const [notes, setNotes] = useState("");
+
+  const handleNext = (type, count) => {
+    if (!type) return;
+    setTicketType(type);
+    setTicketCount(count);
+    setStep(2);
+  };
+
+  const handleBook = (userName, userEmail, userAvatar, userNotes) => {
+    setName(userName);
+    setEmail(userEmail);
+    setAvatar(userAvatar);
+    setNotes(userNotes);
+    setStep(3);
+  };
+
+  const handleBack = () => setStep(1);
+  const handleBookAnother = () => setStep(1);
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
+    <div className="min-h-screen flex items-center justify-center bg-gray-100 p-4">
+      {step === 1 && <StepOne onNext={handleNext} />}
+      {step === 2 && <StepTwo onBack={handleBack} onBook={handleBook} />}
+      {step === 3 && <StepThree name={name} email={email} avatar={avatar} onBookAnother={handleBookAnother} />}
+    </div>
+  );
+};
 
-export default App
+export default App;
